@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<body>
+
+<div class="container">
+    <div class="main-body">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Task Manager</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal">Add a project</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal1">Add a new
+                                employee</a>
+                        </li>
+                    </ul>
+
+                    <!--            <form class="d-flex">-->
+                    <!--                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
+                    <!--                <button class="btn btn-outline-success" type="submit">Search</button>-->
+                    <!--            </form>-->
+                </div>
+            </div>
+        </nav>
+
+        <div class="container bootstrap snippets bootdey">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-box no-header clearfix">
+                        <div class="main-box-body clearfix">
+                            <div class="table-responsive">
+                                <table class="table user-list">
+
+                                    <thead>
+                                    <th></th>
+                                    <th class="text-center"><span>Project Name</span></th>
+                                    <th class="text-center"><span>Status</span></th>
+                                    <th class="text-center"><span>Deadline</span></th>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr th:each="project : ${projects}">
+                                        <td class="text-center">
+                                            <img class="row"
+                                                 src="https://cdn-icons-png.flaticon.com/512/1087/1087902.png"
+                                                 alt=""
+                                                 style="width:50px;height:50px;">
+                                        </td>
+                                        <td class="text-center" th:text="${project.name}"></td>
+                                        <td class="text-center" th:text="${project.status}"></td>
+                                        <td class="text-center" th:text="${project.deadline}"></td>
+                                        <td class="text-center" style="width: 20%;">
+
+                                            <button type="button" class="btn btn-default btn-sm"
+                                                    th:onclick="|window.location.href='/project/${project.id}'|">
+                                                <span class="glyphicon glyphicon-edit"></span> Edit
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+function clearFieldsAddEmp() {
+    document.getElementById("emp-f-name").value=""
+    document.getElementById("emp-l-name").value=""
+    document.getElementById("emp-email").value=""
+    document.getElementById("emp-phone").value=""
+    document.getElementById("emp-address").value=""
+    document.getElementById("emp-role").value=""
+    document.getElementById("emp-user").value=""
+    document.getElementById("emp-pass").value=""
+    document.getElementById("emp-pass-c").value=""
+}
+function clearFieldsAddProject() {
+    document.getElementById("project-name").value=""
+    document.getElementById("project-deadline").value=""
+}
+
+function formSubmit() {
+    document.getElementById("addEmplForm").submit();
+}
+
+function formProjectSubmit() {
+    document.getElementById("addProjectForm").submit();
+}
+
+</script>
+
+<!-- pop up add project -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add a new project</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addProjectForm" method="post" th:action="@{/addProject}" th:object="${projectModel}">
+
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Project name:</label>
+                        <input name="name" th:field="*{name}" type="text" class="form-control" id="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deadline" class="col-form-label">Project deadline:</label>
+                        <input name="deadline" th:field="*{deadline}" type="date" id="deadline" min="2021-11-07"
+                               max="2025-01-01">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button onclick="formProjectSubmit()" class="btn btn-default" data-dismiss="modal">Add Project</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                                onclick="clearFieldsAddProject()" value="Clear">Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- pop up add employee -->
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add a new employee</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addEmplForm" method="post" th:action="@{/addEmployee}" th:object="${employeeFormModel}">
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="firstName" class="col-form-label">First Name:</label>
+                            <input name="firstName" th:field="*{employeeModel.firstName}" required type="text"
+                                   class="form-control" id="firstName">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="lastName" class="col-form-label">Last Name:</label>
+                            <input name="lastName" th:field="*{employeeModel.lastName}" type="text" class="form-control"
+                                   id="lastName">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="email" class="col-form-label">Email:</label>
+                            <input name="email" th:field="*{employeeModel.email}" type="text" class="form-control"
+                                   id="email">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="phone" class="col-form-label">Phone:</label>
+                            <input name="phone" th:field="*{employeeModel.phone}" type="text" class="form-control"
+                                   id="phone">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="address" class="col-form-label">Address:</label>
+                            <input name="address" th:field="*{employeeModel.address}" type="text" class="form-control"
+                                   id="address">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="role" class="col-form-label">Role:</label>
+                            <input name="role" th:field="*{employeeModel.role}" type="text" class="form-control"
+                                   id="role">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="username" class="col-form-label">Username:</label>
+                            <input name="username" th:field="*{credentialModel.username}" type="text"
+                                   class="form-control" id="username">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="password" class="col-form-label">Password:</label>
+                            <input name="password" th:field="*{credentialModel.password}" type="password"
+                                   class="form-control" id="password">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <!--                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clearFieldsAddEmp()"-->
+                        <!--                                value="Clear">Add employee-->
+                        <!--                        </button>-->
+                        <button onclick="formSubmit()" data-dismiss="modal" class="btn btn-default">Add employee
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                                onclick="clearFieldsAddEmp()" value="Clear">Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"/>
+</html>
